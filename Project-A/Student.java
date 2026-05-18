@@ -6,7 +6,7 @@ public class Student {
     private int year_Of_Study;
     private StudentCategory category;
 
-    enum StudentCategory {
+    public enum StudentCategory {
         UNDERGRADUATE,
         POSTGRADUATE,
         EXCHANGE
