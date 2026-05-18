@@ -68,17 +68,8 @@ public class Student {
         this.category = category;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "student_ID='" + student_ID + '\'' +
-                ", student_Name='" + student_Name + '\'' +
-                ", programme='" + programme + '\'' +
-                ", year_Of_Study=" + year_Of_Study +
-                ", category=" + category +
-                '}';
-    }
-
     
+
+
 
 }
