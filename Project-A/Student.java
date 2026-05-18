@@ -67,9 +67,17 @@ public class Student {
     public void setCategory(StudentCategory category) {
         this.category = category;
     }
-
     
-
-
+    public void displayStudentInfo() {
+            System.out.println("========================================");
+            System.out.println("Student Information Details");
+            System.out.println("========================================");
+            System.out.println();
+            System.out.println("Student ID: " + student_ID);
+            System.out.println("Student Name: " + student_Name);
+            System.out.println("Programme: " + programme);
+            System.out.println("Year of Study: " + year_Of_Study);
+            System.out.println("Category: " + category);
+        }
 
 }
