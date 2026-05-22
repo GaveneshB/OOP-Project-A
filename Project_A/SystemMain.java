@@ -558,6 +558,7 @@ public class SystemMain {
         do {
             System.out.println("\n========== MAIN MENU ==========");
             System.out.println("1. Student Management System");
+            System.out.println("2. Facility Booking System");
             System.out.println("3. Equipment Borrowing System");
             System.out.println("4. Facility Issue Reporting");
             System.out.println("5. Feedback Collection System");
@@ -569,6 +570,9 @@ public class SystemMain {
             switch(mainChoice){
                 case 1:
                     studentMenu();
+                    break;
+                case 2:
+                    bookingMenu();
                     break;
                 case 3:
                     equipmentMenu();
