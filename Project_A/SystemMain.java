@@ -133,8 +133,6 @@ public class SystemMain {
             }
 
         } while (choice != 5);
-
-        input.close();
     }
 
      // Facility Booking System
