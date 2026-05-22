@@ -1,12 +1,12 @@
-enum EquipmentType {
-    LAPTOP, PROJECTOR, CAMERA, SENSOR_KIT
-}
-
-enum BorrowStatus {
-    BORROWED, RETURNED, OVERDUE
-}
-
 public class EquipmentBorrowing{
+    enum EquipmentType {
+        LAPTOP, PROJECTOR, CAMERA, SENSOR_KIT
+    }
+
+    enum BorrowStatus {
+        BORROWED, RETURNED, OVERDUE
+    }
+
     private String studentId;
     private EquipmentType equipmentType;
     private int borrowDays;

@@ -1,16 +1,16 @@
-enum IssueType {
-    ELECTRICAL, NETWORK, FURNITURE, CLEANLINESS, AIR_CONDITIONING
-}
-
-enum PriorityLevel {
-    LOW, MEDIUM, HIGH, CRITICAL
-}
-
-enum ReportStatus {
-    OPEN, IN_PROGRESS, RESOLVED, CLOSED
-}
-
 class IssueReport {
+    enum IssueType {
+        ELECTRICAL, NETWORK, FURNITURE, CLEANLINESS, AIR_CONDITIONING
+    }
+
+    enum PriorityLevel {
+        LOW, MEDIUM, HIGH, CRITICAL
+    }
+
+    enum ReportStatus {
+        OPEN, IN_PROGRESS, RESOLVED, CLOSED
+    }
+
     private String studentId;
     private IssueType issueType;
     private PriorityLevel priority;
