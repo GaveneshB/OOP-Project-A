@@ -4,10 +4,12 @@ import java.util.Vector;
 public class SystemMain {
     static Student[] students = new Student[100];
     static int studentCount = 0;
+    static Vector<Booking> booking_List = new Vector<>();
+    static int bookingCount = 0;
     static Vector<EquipmentBorrowing> borrow_List = new Vector<>();
     static Vector<IssueReport> issue_List = new Vector<>();
 
-
+    // Student Profile Management System
     static void addStudent(Student student) {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID: ");
@@ -133,6 +135,168 @@ public class SystemMain {
         } while (choice != 5);
 
         input.close();
+    }
+
+     // Facility Booking System
+    static void addBooking() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter Booking ID: ");
+        String booking_ID = input.nextLine();
+        System.out.print("Enter Student ID: ");
+        String student_ID = input.nextLine();
+        System.out.print("Enter Booking Date (YYYY-MM-DD): ");
+        String booking_Date = input.nextLine();
+        System.out.print("Enter Duration (hours): ");
+        int duration = input.nextInt();
+        input.nextLine(); 
+        System.out.println("Facility Type : STUDY_ROOM/MEETING_ROOM/COMPUTER_LAB");
+        System.out.print("Enter Facility Type: ");
+        String facility_Type = input.nextLine();
+        System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
+        System.out.print("Enter Time Slot: ");
+        String time_Slot = input.nextLine();
+        System.out.println("Booking Status : PENDING/CONFIRMED/CANCELLED");
+        System.out.print("Enter Booking Status: ");
+        String booking_Status = input.nextLine();
+
+        Booking newBooking = new Booking(booking_ID, student_ID, booking_Date, duration, Booking.FacilityType.valueOf(facility_Type.toUpperCase()), Booking.TimeSlot.valueOf(time_Slot.toUpperCase()), Booking.BookingStatus.valueOf(booking_Status.toUpperCase()));
+        booking_List.add(newBooking);
+    }
+
+    static void displayAllBookings() {
+        for (Booking booking : booking_List) {
+            System.out.println("----------------------------------------");
+            System.out.println("Booking ID: " + booking.getBookingID());
+            System.out.println("Student ID: " + booking.getStudentID());
+            System.out.println("Booking Date: " + booking.getBookingDate());
+            System.out.println("Duration: " + booking.getDuration() + " hours");
+            System.out.println("Facility Type: " + booking.getFacilityType());
+            System.out.println("Time Slot: " + booking.getTimeSlot());
+            System.out.println("Booking Status: " + booking.getBookingStatus());
+        }
+        System.out.println("----------------------------------------");
+    }
+
+    static void searchBookingByStudentID(String student_ID) {
+        boolean found = false;
+        for (Booking booking : booking_List) {
+            if (booking.getStudentID().equals(student_ID)) {
+                System.out.println("Booking found:");
+                System.out.println("----------------------------------------");
+                System.out.println("Booking ID: " + booking.getBookingID());
+                System.out.println("Student ID: " + booking.getStudentID());
+                System.out.println("Booking Date: " + booking.getBookingDate());
+                System.out.println("Duration: " + booking.getDuration() + " hours");
+                System.out.println("Facility Type: " + booking.getFacilityType());
+                System.out.println("Time Slot: " + booking.getTimeSlot());
+                System.out.println("Booking Status: " + booking.getBookingStatus());
+                System.out.println("----------------------------------------");
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No bookings found for Student ID: " + student_ID);
+        }
+    }
+
+    static void searchBookingByID(String booking_ID) {
+        boolean found = false;
+        for (Booking booking : booking_List) {
+            if (booking.getBookingID().equals(booking_ID)) {
+                System.out.println("Booking found:");
+                System.out.println("----------------------------------------");
+                System.out.println("Booking ID: " + booking.getBookingID());
+                System.out.println("Student ID: " + booking.getStudentID());
+                System.out.println("Booking Date: " + booking.getBookingDate());
+                System.out.println("Duration: " + booking.getDuration() + " hours");
+                System.out.println("Facility Type: " + booking.getFacilityType());
+                System.out.println("Time Slot: " + booking.getTimeSlot());
+                System.out.println("Booking Status: " + booking.getBookingStatus());
+                System.out.println("----------------------------------------");
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No booking found with ID: " + booking_ID);
+        }
+    }
+
+    static void calculateTotalDuration() {
+        int totalDuration = 0;
+        for (Booking booking : booking_List) {
+            totalDuration += booking.getDuration();
+        }
+        System.out.println("Total Duration of All Bookings: " + totalDuration + " hours");
+    }
+
+    static void updateBookingStatus() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter Booking ID to update status: ");
+        String booking_ID = input.nextLine();
+        boolean found = false;
+        for (Booking booking : booking_List) {
+            if (booking.getBookingID().equals(booking_ID)) {
+                System.out.print("Enter new status (PENDING/CONFIRMED/CANCELLED): ");
+                String newStatus = input.nextLine();
+                booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
+                System.out.println("Booking status updated successfully.");
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No booking found with the given ID.");
+        }
+    }
+
+    static void bookingMenu() {
+        Scanner input = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n---Facility Booking System---");
+            System.out.println("1. Add New Booking");
+            System.out.println("2. Display All Bookings");
+            System.out.println("3. Search Booking by ID");
+            System.out.println("4. Search Booking by Student ID");
+            System.out.println("5. Calculate Total Duration of Bookings");
+            System.out.println("6. Update Booking Status");
+            System.out.println("7. Back to Main Menu");
+            System.out.print("Enter your choice: ");
+            choice = input.nextInt();
+            input.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    addBooking();
+                    break;
+                case 2:
+                    displayAllBookings();
+                    break;
+                case 3:
+                    System.out.print("Enter Booking ID to search: ");
+                    String booking_ID = input.nextLine();
+                    searchBookingByID(booking_ID);
+                    break;
+                case 4:
+                    System.out.print("Enter Student ID to search bookings: ");
+                    String student_ID = input.nextLine();
+                    searchBookingByStudentID(student_ID);
+                    break;
+                case 5:
+                    calculateTotalDuration();
+                    break;
+                case 6:
+                    updateBookingStatus();
+                    break;
+                case 7:
+                    System.out.println("Returning to Main Menu...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 7);
     }
     
     // Equipment Borrowing System

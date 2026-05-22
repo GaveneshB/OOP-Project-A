@@ -10,45 +10,56 @@ public class Booking {
         PENDING, APPROVED, REJECTED, CANCELLED 
 } 
 
-    private String bookingID;
-    private String studentID;
+    private String booking_ID;
+    private String student_ID;
+    private String booking_Date;
     private int duration;
-    private FacilityType facilityType;
-    private TimeSlot timeSlot;
-    private BookingStatus bookingStatus;
+    private FacilityType facility_Type;
+    private TimeSlot time_Slot;
+    private BookingStatus booking_Status;
 
     public Booking() {
-        this.bookingID = "";
-        this.studentID = "";
-        this.facilityType = FacilityType.STUDY_ROOM;
-        this.timeSlot = TimeSlot.MORNING;
-        this.bookingStatus = BookingStatus.PENDING;
+        this.booking_ID = "";
+        this.student_ID = "";
+        this.facility_Type = FacilityType.STUDY_ROOM;
+        this.time_Slot = TimeSlot.MORNING;
+        this.booking_Status = BookingStatus.PENDING;
         this.duration = 0;
+        this.booking_Date = "";
     }
 
-    public Booking(String bookingID, String studentID, int duration, FacilityType facilityType, TimeSlot timeSlot, BookingStatus bookingStatus) {
-        this.bookingID = bookingID;
-        this.studentID = studentID;
+    public Booking(String booking_ID, String student_ID, String booking_Date, int duration, FacilityType facility_Type, TimeSlot time_Slot, BookingStatus booking_Status) {
+        this.booking_ID = booking_ID;
+        this.student_ID = student_ID;
+        this.booking_Date = booking_Date;
         this.duration = duration;
-        this.facilityType = facilityType;
-        this.timeSlot = timeSlot;
-        this.bookingStatus = bookingStatus;
+        this.facility_Type = facility_Type;
+        this.time_Slot = time_Slot;
+        this.booking_Status = booking_Status;
     }
 
     public String getBookingID() {
-        return bookingID;
+        return booking_ID;
     }
 
-    public void setBookingID(String bookingID) {
-        this.bookingID = bookingID;
+    public void setBookingID(String booking_ID) {
+        this.booking_ID = booking_ID;
     }
 
     public String getStudentID() {
-        return studentID;
+        return student_ID;
     }
 
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
+    public void setStudentID(String student_ID) {
+        this.student_ID = student_ID;
+    }
+
+    public String getBookingDate() {
+        return booking_Date;
+    }
+
+    public void setBookingDate(String booking_Date) {
+        this.booking_Date = booking_Date;
     }
 
     public int getDuration() {
@@ -60,27 +71,27 @@ public class Booking {
     }
 
     public FacilityType getFacilityType() {
-        return facilityType;
+        return facility_Type;
     }
 
-    public void setFacilityType(FacilityType facilityType) {
-        this.facilityType = facilityType;
+    public void setFacilityType(FacilityType facility_Type) {
+        this.facility_Type = facility_Type;
     }
 
     public TimeSlot getTimeSlot() {
-        return timeSlot;
+        return time_Slot;
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setTimeSlot(TimeSlot time_Slot) {
+        this.time_Slot = time_Slot;
     }
 
     public BookingStatus getBookingStatus() {
-        return bookingStatus;
+        return booking_Status;
     }
 
-    public void setBookingStatus(BookingStatus bookingStatus) {
-        this.bookingStatus = bookingStatus;
+    public void setBookingStatus(BookingStatus booking_Status) {
+        this.booking_Status = booking_Status;
     }
 
 }
