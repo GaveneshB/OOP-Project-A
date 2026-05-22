@@ -551,39 +551,6 @@ public class SystemMain {
         } while (choice != 6);
     }
 
-    static void viewSystemSummary() {
-        System.out.println("\n--- System Summary ---");
-        System.out.println("Total Students: " + studentCount);
-        System.out.println("Total Bookings: " + booking_List.size());
-        System.out.println("Total Borrowed Items: " + borrow_List.size());
-        System.out.println("Total Issue Reports: " + issue_List.size());
-
-        // Breakdown by student category
-        countByCategory();
-
-        // Bookings by status
-        int pending = 0, approved = 0, rejected = 0, cancelled = 0;
-        for (Booking b : booking_List) {
-            switch (b.getBookingStatus()) {
-                case Booking.BookingStatus.PENDING:
-                    pending++;
-                    break;
-                case Booking.BookingStatus.APPROVED:
-                    approved++;
-                    break;
-                case Booking.BookingStatus.REJECTED:
-                    rejected++;
-                    break;
-                case Booking.BookingStatus.CANCELLED:
-                    cancelled++;
-                    break;
-                default:
-                    break;
-            }
-        }
-        System.out.println("Bookings by Status - Pending: " + pending + ", Approved: " + approved + ", Rejected: " + rejected + ", Cancelled: " + cancelled);
-    }
-
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int mainChoice;
@@ -591,7 +558,6 @@ public class SystemMain {
         do {
             System.out.println("\n========== MAIN MENU ==========");
             System.out.println("1. Student Management System");
-            System.out.println("2. View System Summary");
             System.out.println("3. Equipment Borrowing System");
             System.out.println("4. Facility Issue Reporting");
             System.out.println("5. Feedback Collection System");
@@ -603,9 +569,6 @@ public class SystemMain {
             switch(mainChoice){
                 case 1:
                     studentMenu();
-                    break;
-                case 2:
-                    viewSystemSummary();
                     break;
                 case 3:
                     equipmentMenu();
