@@ -160,7 +160,7 @@ public class AdditionalFeatureSystem {
                 feedbackList.get(i).displayFeedback();
             }
         }
-        System.out.flush();
+        
     }
 
     public static void searchFeedback(){
