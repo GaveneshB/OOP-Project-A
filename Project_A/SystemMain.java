@@ -146,7 +146,7 @@ public class SystemMain {
         System.out.print("Enter Borrowing Days: "); 
         int borrow_Days = input.nextInt();
         input.nextLine();
-        EquipmentBorrowing newBorrowing = new EquipmentBorrowing(student_ID, EquipmentType.valueOf(equipment_Type.toUpperCase()), borrow_Days);
+        EquipmentBorrowing newBorrowing = new EquipmentBorrowing(student_ID, EquipmentBorrowing.EquipmentType.valueOf(equipment_Type.toUpperCase()), borrow_Days);
         borrow_List.add(newBorrowing);
     }
     
