@@ -588,7 +588,8 @@ public class SystemMain {
     System.out.println("EXCHANGE      : " + exchange);
 
     int pending = 0;
-    int confirmed = 0;
+    int approved = 0;
+    int rejected = 0;
     int cancelled = 0;
 
     for (int i = 0; i < booking_List.size(); i++) {
@@ -600,7 +601,11 @@ public class SystemMain {
                 break;
 
             case APPROVED:
-                confirmed++;
+                approved++;
+                break;
+
+            case REJECTED:
+                rejected++;
                 break;
 
             case CANCELLED:
@@ -611,7 +616,8 @@ public class SystemMain {
 
     System.out.println("\n--- Booking Status Summary ---");
     System.out.println("PENDING   : " + pending);
-    System.out.println("CONFIRMED : " + confirmed);
+    System.out.println("APPROVED  : " + approved);
+    System.out.println("REJECTED  : " + rejected);
     System.out.println("CANCELLED : " + cancelled);
 
     int low = 0;
