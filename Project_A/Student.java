@@ -1,8 +1,8 @@
 public class Student {
-    private String student_ID;
-    private String student_Name;
+    private String studentID;
+    private String studentName;
     private String programme;
-    private int year_Of_Study;
+    private int yearOfStudy;
     private StudentCategory category;
 
     public enum StudentCategory {
@@ -12,35 +12,35 @@ public class Student {
     }
 
     public Student() {
-        this.student_ID = "";
-        this.student_Name = "";
+        this.studentID = "";
+        this.studentName = "";
         this.programme = "";
-        this.year_Of_Study = 0;
+        this.yearOfStudy = 0;
         this.category = StudentCategory.UNDERGRADUATE;
     }
 
-    public Student(String student_ID, String student_Name, String programme, int year_Of_Study, StudentCategory category) {
-        this.student_ID = student_ID;
-        this.student_Name = student_Name;
+    public Student(String studentID, String studentName, String programme, int yearOfStudy, StudentCategory category) {
+        this.studentID = studentID;
+        this.studentName = studentName;
         this.programme = programme;
-        this.year_Of_Study = year_Of_Study;
+        this.yearOfStudy = yearOfStudy;
         this.category = category;
     }
 
-    public String getStudent_ID() {
-        return student_ID;
+    public String getStudentID() {
+        return studentID;
     }
 
-    public void setStudent_ID(String student_ID) {
-        this.student_ID = student_ID;
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
 
-    public String getStudent_Name() {
-        return student_Name;
+    public String getStudentName() {
+        return studentName;
     }
 
-    public void setStudent_Name(String student_Name) {
-        this.student_Name = student_Name;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public String getProgramme() {
@@ -51,12 +51,12 @@ public class Student {
         this.programme = programme;
     }
 
-    public int getYear_Of_Study() {
-        return year_Of_Study;
+    public int getYearOfStudy() {
+        return yearOfStudy;
     }
 
-    public void setYear_Of_Study(int year_Of_Study) {
-        this.year_Of_Study = year_Of_Study;
+    public void setYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
     }
 
     public StudentCategory getCategory() {
@@ -72,10 +72,10 @@ public class Student {
             System.out.println("Student Information Details");
             System.out.println("========================================");
             System.out.println();
-            System.out.println("Student ID: " + student_ID);
-            System.out.println("Student Name: " + student_Name);
+            System.out.println("Student ID: " + studentID);
+            System.out.println("Student Name: " + studentName);
             System.out.println("Programme: " + programme);
-            System.out.println("Year of Study: " + year_Of_Study);
+            System.out.println("Year of Study: " + yearOfStudy);
             System.out.println("Category: " + category);
         }
 
