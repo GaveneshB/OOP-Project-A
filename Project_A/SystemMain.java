@@ -1,11 +1,10 @@
 import java.util.Scanner;
-import java.util.Vector; 
-package Project-A.Student;  
+
 
 public class SystemMain {
-    static Students[] students = new Students[100];
+    static Student[] students = new Student[100];
     static int studentCount = 0;
-    //private static Vector<Student> students = new Vector<>();
+    
 
 
     static void addStudent(Student student) {
@@ -24,15 +23,16 @@ public class SystemMain {
         Student.StudentCategory category = Student.StudentCategory.valueOf(categoryStr.toUpperCase());
         
         Student newStudent = new Student(student_ID, student_Name, programme, year_Of_Study, category);
-
+        students[studentCount++] = newStudent;
     }
 
     static void displayAllStudents() {
-        if (students.isEmpty()) {
+        if (studentCount == 0) {
             System.out.println("No students registered.");
         } else {
             System.out.println("List of Students:");
-            for (Student student : students) {
+            for (int i = 0; i < studentCount; i++) {
+                Student student = students[i];
                 System.out.println("----------------------------------------");
                 System.out.println("ID: " + student.getStudent_ID());
                 System.out.println("Name: " + student.getStudent_Name());
@@ -46,7 +46,8 @@ public class SystemMain {
 
     static void searchStudentByID(String student_ID) {
         boolean found = false;
-        for (Student student : students) {
+        for (int i = 0; i < studentCount; i++) {
+            Student student = students[i];
             if (student.getStudent_ID().equals(student_ID)) {
                 System.out.println("Student found:");
                 System.out.println("----------------------------------------");
@@ -70,7 +71,8 @@ public class SystemMain {
         int postgraduateCount = 0;
         int exchangeCount = 0;
 
-        for (Student student : students) {
+        for (int i = 0; i < studentCount; i++) {
+            Student student = students[i];
             switch (student.getCategory()) {
                 case UNDERGRADUATE:
                     undergraduateCount++;
@@ -133,7 +135,34 @@ public class SystemMain {
     }
 
     public static void main(String[] args) {
-        studentMenu(); 
+        Scanner input = new Scanner(System.in);
+        int mainChoice;
+
+        do {
+            System.out.println("\n========== MAIN MENU ==========");
+            System.out.println("1. Student Management System");
+            System.out.println("5. Feedback Collection System");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            mainChoice = input.nextInt();
+            input.nextLine();
+
+            switch(mainChoice){
+                case 1:
+                    studentMenu();
+                    break;
+                case 5:
+                    AdditionalFeatureSystem.feedbackMenu();
+                    break;
+                case 3:
+                    System.out.println("Thank you for using the system. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while(mainChoice!= 3);
+
+        
     }
 
 }
