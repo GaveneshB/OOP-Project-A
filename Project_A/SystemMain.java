@@ -149,13 +149,13 @@ public class SystemMain {
         System.out.print("Enter Duration (hours): ");
         int duration = input.nextInt();
         input.nextLine(); 
-        System.out.println("Facility Type : STUDY_ROOM/MEETING_ROOM/COMPUTER_LAB");
+        System.out.println("Facility Type : STUDY_ROOM/COMPUTER_LAB/SPORT_COURT/SEMINAR_ROOM");
         System.out.print("Enter Facility Type: ");
         String facility_Type = input.nextLine();
         System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
         System.out.print("Enter Time Slot: ");
         String time_Slot = input.nextLine();
-        System.out.println("Booking Status : PENDING/CONFIRMED/CANCELLED");
+        System.out.println("Booking Status : PENDING/APPROVED/REJECTED/CANCELLED");
         System.out.print("Enter Booking Status: ");
         String booking_Status = input.nextLine();
 
@@ -237,7 +237,7 @@ public class SystemMain {
         boolean found = false;
         for (Booking booking : booking_List) {
             if (booking.getBookingID().equals(booking_ID)) {
-                System.out.print("Enter new status (PENDING/CONFIRMED/CANCELLED): ");
+                System.out.print("Enter new status (PENDING/APPROVED/REJECTED/CANCELLED): ");
                 String newStatus = input.nextLine();
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Booking status updated successfully.");
