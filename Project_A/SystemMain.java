@@ -149,13 +149,13 @@ public class SystemMain {
         System.out.print("Enter Duration (hours): ");
         int duration = input.nextInt();
         input.nextLine(); 
-        System.out.println("Facility Type : STUDY_ROOM/MEETING_ROOM/COMPUTER_LAB");
+        System.out.println("Facility Type : STUDY_ROOM/COMPUTER_LAB/SPORT_COURT/SEMINAR_ROOM");
         System.out.print("Enter Facility Type: ");
         String facility_Type = input.nextLine();
         System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
         System.out.print("Enter Time Slot: ");
         String time_Slot = input.nextLine();
-        System.out.println("Booking Status : PENDING/CONFIRMED/CANCELLED");
+        System.out.println("Booking Status : PENDING/APPROVED/REJECTED/CANCELLED");
         System.out.print("Enter Booking Status: ");
         String booking_Status = input.nextLine();
 
@@ -237,7 +237,7 @@ public class SystemMain {
         boolean found = false;
         for (Booking booking : booking_List) {
             if (booking.getBookingID().equals(booking_ID)) {
-                System.out.print("Enter new status (PENDING/CONFIRMED/CANCELLED): ");
+                System.out.print("Enter new status (PENDING/APPROVED/REJECTED/CANCELLED): ");
                 String newStatus = input.nextLine();
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Booking status updated successfully.");
@@ -551,6 +551,111 @@ public class SystemMain {
         } while (choice != 6);
     }
 
+    static void viewSystemSummary() {
+
+    System.out.println("\n========== SYSTEM SUMMARY ==========");
+
+    System.out.println("Total Students Registered : " + studentCount);
+    System.out.println("Total Facility Bookings   : " + booking_List.size());
+    System.out.println("Total Equipment Borrowing : " + borrow_List.size());
+    System.out.println("Total Issue Reports       : " + issue_List.size());
+
+    int undergraduate = 0;
+    int postgraduate = 0;
+    int exchange = 0;
+
+    for (int i = 0; i < studentCount; i++) {
+
+        switch (students[i].getCategory()) {
+
+            case UNDERGRADUATE:
+                undergraduate++;
+                break;
+
+            case POSTGRADUATE:
+                postgraduate++;
+                break;
+
+            case EXCHANGE:
+                exchange++;
+                break;
+        }
+    }
+
+    System.out.println("\n--- Student Category Summary ---");
+    System.out.println("UNDERGRADUATE : " + undergraduate);
+    System.out.println("POSTGRADUATE  : " + postgraduate);
+    System.out.println("EXCHANGE      : " + exchange);
+
+    int pending = 0;
+    int approved = 0;
+    int rejected = 0;
+    int cancelled = 0;
+
+    for (int i = 0; i < booking_List.size(); i++) {
+
+        switch (booking_List.get(i).getBookingStatus()) {
+
+            case PENDING:
+                pending++;
+                break;
+
+            case APPROVED:
+                approved++;
+                break;
+
+            case REJECTED:
+                rejected++;
+                break;
+
+            case CANCELLED:
+                cancelled++;
+                break;
+        }
+    }
+
+    System.out.println("\n--- Booking Status Summary ---");
+    System.out.println("PENDING   : " + pending);
+    System.out.println("APPROVED  : " + approved);
+    System.out.println("REJECTED  : " + rejected);
+    System.out.println("CANCELLED : " + cancelled);
+
+    int low = 0;
+    int medium = 0;
+    int high = 0;
+    int critical = 0;
+
+    for (int i = 0; i < issue_List.size(); i++) {
+
+        switch (issue_List.get(i).getPriority()) {
+
+            case LOW:
+                low++;
+                break;
+
+            case MEDIUM:
+                medium++;
+                break;
+
+            case HIGH:
+                high++;
+                break;
+
+            case CRITICAL:
+                critical++;
+                break;
+        }
+    }
+
+    System.out.println("\n--- Issue Priority Summary ---");
+    System.out.println("LOW      : " + low);
+    System.out.println("MEDIUM   : " + medium);
+    System.out.println("HIGH     : " + high);
+    System.out.println("CRITICAL : " + critical);
+
+    System.out.println("\n====================================");
+}
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int mainChoice;
@@ -562,6 +667,7 @@ public class SystemMain {
             System.out.println("3. Equipment Borrowing System");
             System.out.println("4. Facility Issue Reporting");
             System.out.println("5. Feedback Collection System");
+            System.out.println("6. View System Summary");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
             mainChoice = input.nextInt();
@@ -582,6 +688,9 @@ public class SystemMain {
                     break;
                 case 5:
                     AdditionalFeatureSystem.feedbackMenu();
+                    break;
+                case 6:
+                    viewSystemSummary();
                     break;
                 case 0:
                     System.out.println("Thank you for using the system. Goodbye!");
