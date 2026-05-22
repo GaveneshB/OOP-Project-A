@@ -262,7 +262,7 @@ public class SystemMain {
         String issue_Type = input.nextLine();
         System.out.print("Enter Priority Level (LOW/MEDIUM/HIGH/CRITICAL): ");
         String priority = input.nextLine();
-        IssueReport newReport = new IssueReport(student_ID, IssueType.valueOf(issue_Type.toUpperCase()), PriorityLevel.valueOf(priority.toUpperCase()));
+        IssueReport newReport = new IssueReport(student_ID, IssueReport.IssueType.valueOf(issue_Type.toUpperCase()), IssueReport.PriorityLevel.valueOf(priority.toUpperCase()));
         issue_List.add(newReport);
         System.out.println("Issue report added successfully.");
     }
@@ -335,7 +335,7 @@ public class SystemMain {
             if (report.getStudentId().equals(student_ID)) {
                 System.out.print("Enter new status (OPEN/IN_PROGRESS/RESOLVED/CLOSED): ");
                 String newStatus = input.nextLine();
-                report.setStatus(ReportStatus.valueOf(newStatus.toUpperCase()));
+                report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Report status updated successfully.");
                 found = true;
                 break;
