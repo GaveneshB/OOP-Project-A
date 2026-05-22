@@ -142,7 +142,7 @@ public class SystemMain {
             System.out.println("\n========== MAIN MENU ==========");
             System.out.println("1. Student Management System");
             System.out.println("5. Feedback Collection System");
-            System.out.println("3. Exit");
+            System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
             mainChoice = input.nextInt();
             input.nextLine();
@@ -154,13 +154,13 @@ public class SystemMain {
                 case 5:
                     AdditionalFeatureSystem.feedbackMenu();
                     break;
-                case 3:
+                case 0:
                     System.out.println("Thank you for using the system. Goodbye!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while(mainChoice!= 3);
+        } while(mainChoice!= 0);
 
         
     }
