@@ -34,10 +34,10 @@ public class SystemMain {
             for (int i = 0; i < studentCount; i++) {
                 Student student = students[i];
                 System.out.println("----------------------------------------");
-                System.out.println("ID: " + student.getStudent_ID());
-                System.out.println("Name: " + student.getStudent_Name());
+                System.out.println("ID: " + student.getStudentID());
+                System.out.println("Name: " + student.getStudentName());
                 System.out.println("Programme: " + student.getProgramme());
-                System.out.println("Year of Study: " + student.getYear_Of_Study()); 
+                System.out.println("Year of Study: " + student.getYearOfStudy()); 
                 System.out.println("Category: " + student.getCategory());
                 System.out.println("----------------------------------------");
             }
@@ -48,13 +48,13 @@ public class SystemMain {
         boolean found = false;
         for (int i = 0; i < studentCount; i++) {
             Student student = students[i];
-            if (student.getStudent_ID().equals(student_ID)) {
+            if (student.getStudentID().equals(student_ID)) {
                 System.out.println("Student found:");
                 System.out.println("----------------------------------------");
-                System.out.println("ID: " + student.getStudent_ID());
-                System.out.println("Name: " + student.getStudent_Name());
+                System.out.println("ID: " + student.getStudentID());
+                System.out.println("Name: " + student.getStudentName());
                 System.out.println("Programme: " + student.getProgramme());
-                System.out.println("Year of Study: " + student.getYear_Of_Study()); 
+                System.out.println("Year of Study: " + student.getYearOfStudy()); 
                 System.out.println("Category: " + student.getCategory());
                 System.out.println("----------------------------------------");
                 found = true;
