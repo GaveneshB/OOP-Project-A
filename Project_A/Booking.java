@@ -1,17 +1,16 @@
-public class Booking {
+public class Booking extends ServiceRecord {
 
-    enum FacilityType { 
+    public enum FacilityType { 
         STUDY_ROOM, COMPUTER_LAB, SPORT_COURT, SEMINAR_ROOM 
 } 
-    enum TimeSlot { 
+    public enum TimeSlot { 
         MORNING, AFTERNOON, EVENING 
 } 
-    enum BookingStatus { 
+    public enum BookingStatus { 
         PENDING, APPROVED, REJECTED, CANCELLED 
 } 
 
     private String booking_ID;
-    private String student_ID;
     private String booking_Date;
     private int duration;
     private FacilityType facility_Type;
@@ -19,8 +18,8 @@ public class Booking {
     private BookingStatus booking_Status;
 
     public Booking() {
+        super();
         this.booking_ID = "";
-        this.student_ID = "";
         this.facility_Type = FacilityType.STUDY_ROOM;
         this.time_Slot = TimeSlot.MORNING;
         this.booking_Status = BookingStatus.PENDING;
@@ -29,8 +28,25 @@ public class Booking {
     }
 
     public Booking(String booking_ID, String student_ID, String booking_Date, int duration, FacilityType facility_Type, TimeSlot time_Slot, BookingStatus booking_Status) {
+        super(student_ID);
+        
+        if (booking_ID == null || booking_ID.trim().isEmpty()) {
+            throw new IllegalArgumentException("Booking ID cannot be empty.");
+            }
+            
+        if (booking_Date == null || booking_Date.trim().isEmpty()) {
+            throw new IllegalArgumentException("Booking date cannot be empty.");
+            }
+
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration must be greater than 0.");
+            }
+
+        if (duration > 8) { 
+            throw new IllegalArgumentException("Duration cannot exceed 8 hours.");
+            }
+
         this.booking_ID = booking_ID;
-        this.student_ID = student_ID;
         this.booking_Date = booking_Date;
         this.duration = duration;
         this.facility_Type = facility_Type;
@@ -47,11 +63,11 @@ public class Booking {
     }
 
     public String getStudentID() {
-        return student_ID;
+        return getStudentId();
     }
 
     public void setStudentID(String student_ID) {
-        this.student_ID = student_ID;
+        setStudentId(student_ID);
     }
 
     public String getBookingDate() {
@@ -67,6 +83,15 @@ public class Booking {
     }
 
     public void setDuration(int duration) {
+
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration must be greater than 0.");
+        }
+
+        if (duration > 8) {
+            throw new IllegalArgumentException("Duration cannot exceed 8 hours.");
+        }
+
         this.duration = duration;
     }
 
@@ -92,6 +117,17 @@ public class Booking {
 
     public void setBookingStatus(BookingStatus booking_Status) {
         this.booking_Status = booking_Status;
+    }
+
+    @Override
+    public void displayRecord() {
+        System.out.println("Booking ID: " + booking_ID);
+        System.out.println("Student ID: " + getStudentId());
+        System.out.println("Booking Date: " + booking_Date);
+        System.out.println("Duration: " + duration + " hours");
+        System.out.println("Facility Type: " + facility_Type);
+        System.out.println("Time Slot: " + time_Slot);
+        System.out.println("Booking Status: " + booking_Status);
     }
 
 }

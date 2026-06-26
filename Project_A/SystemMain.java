@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -8,6 +9,7 @@ public class SystemMain {
     static int bookingCount = 0;
     static Vector<EquipmentBorrowing> borrow_List = new Vector<>();
     static Vector<IssueReport> issue_List = new Vector<>();
+    private static final String BOOKING_FILE = "bookings.txt";
 
     // Student Profile Management System
     static void addStudent(Student student) {
@@ -138,27 +140,50 @@ public class SystemMain {
      // Facility Booking System
     static void addBooking() {
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter Booking ID: ");
-        String booking_ID = input.nextLine();
-        System.out.print("Enter Student ID: ");
-        String student_ID = input.nextLine();
-        System.out.print("Enter Booking Date (YYYY-MM-DD): ");
-        String booking_Date = input.nextLine();
-        System.out.print("Enter Duration (hours): ");
-        int duration = input.nextInt();
-        input.nextLine(); 
-        System.out.println("Facility Type : STUDY_ROOM/COMPUTER_LAB/SPORT_COURT/SEMINAR_ROOM");
-        System.out.print("Enter Facility Type: ");
-        String facility_Type = input.nextLine();
-        System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
-        System.out.print("Enter Time Slot: ");
-        String time_Slot = input.nextLine();
-        System.out.println("Booking Status : PENDING/APPROVED/REJECTED/CANCELLED");
-        System.out.print("Enter Booking Status: ");
-        String booking_Status = input.nextLine();
+        String booking_ID, student_ID, booking_Date, facility_Type, time_Slot, booking_Status;
+        int duration;
 
-        Booking newBooking = new Booking(booking_ID, student_ID, booking_Date, duration, Booking.FacilityType.valueOf(facility_Type.toUpperCase()), Booking.TimeSlot.valueOf(time_Slot.toUpperCase()), Booking.BookingStatus.valueOf(booking_Status.toUpperCase()));
-        booking_List.add(newBooking);
+        try{
+
+            System.out.print("Enter Booking ID: ");
+            booking_ID = input.nextLine();
+
+            System.out.print("Enter Student ID: ");
+            student_ID = input.nextLine();
+
+            System.out.print("Enter Booking Date (YYYY-MM-DD): ");
+            booking_Date = input.nextLine();
+
+            System.out.print("Enter Duration (hours): ");
+            duration = input.nextInt();
+            input.nextLine(); 
+
+            System.out.println("Facility Type : STUDY_ROOM/COMPUTER_LAB/SPORT_COURT/SEMINAR_ROOM");
+            System.out.print("Enter Facility Type: ");
+            facility_Type = input.nextLine();
+
+            System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
+            System.out.print("Enter Time Slot: ");
+            time_Slot = input.nextLine();
+
+            System.out.println("Booking Status : PENDING/APPROVED/REJECTED/CANCELLED");
+            System.out.print("Enter Booking Status: ");
+            booking_Status = input.nextLine();
+
+            Booking newBooking = new Booking(booking_ID, student_ID, booking_Date, duration, Booking.FacilityType.valueOf(facility_Type.toUpperCase()), Booking.TimeSlot.valueOf(time_Slot.toUpperCase()), Booking.BookingStatus.valueOf(booking_Status.toUpperCase()));           
+            booking_List.add(newBooking); 
+            saveBookingsToFile();
+            System.out.println("Booking added successfully.");
+        }
+
+        catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        catch (Exception e) {
+            System.out.println("Invalid input. Please try again."); 
+        }
+
     }
 
     static void displayAllBookings() {
@@ -248,7 +273,24 @@ public class SystemMain {
         }
     }
 
+    static void deleteBookingByID(String booking_ID) {
+        boolean found = false;
+        for (int i = 0; i < booking_List.size(); i++) {
+            if (booking_List.get(i).getBookingID().equals(booking_ID)) {
+                booking_List.remove(i);
+                saveBookingsToFile();
+                System.out.println("Booking with ID " + booking_ID + " has been deleted.");
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No booking found with the given ID.");
+        }
+    }
+
     static void bookingMenu() {
+        loadBookingsFromFile();
         Scanner input = new Scanner(System.in);
         int choice;
 
@@ -260,7 +302,10 @@ public class SystemMain {
             System.out.println("4. Search Booking by Student ID");
             System.out.println("5. Calculate Total Duration of Bookings");
             System.out.println("6. Update Booking Status");
-            System.out.println("7. Back to Main Menu");
+            System.out.println("7. Load Bookings from File");
+            System.out.println("8. Save Bookings to File    ");
+            System.out.println("9. Delete Booking by ID");
+            System.out.println("10. Back to Main Menu");
             System.out.print("Enter your choice: ");
             choice = input.nextInt();
             input.nextLine(); 
@@ -289,12 +334,84 @@ public class SystemMain {
                     updateBookingStatus();
                     break;
                 case 7:
+                    loadBookingsFromFile();
+                    break;
+                case 8:
+                    System.out.print("Enter Booking ID to delete: ");
+                    String delete_ID = input.nextLine();
+                    deleteBookingByID(delete_ID);
+                    break;
+                case 9:
+                    saveBookingsToFile();
+                    break;
+                case 10:
                     System.out.println("Returning to Main Menu...");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 7);
+        } while (choice != 10);
+    }
+
+    public static void loadBookingsFromFile() {
+        try (Scanner fileScanner = new Scanner(new java.io.File(BOOKING_FILE))) {
+            booking_List.clear();
+            int count = 0;
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] parts = line.split(",");
+                if (parts.length == 7) {
+                    String booking_ID = parts[0].trim();
+                    String student_ID = parts[1].trim();
+                    String booking_Date = parts[2].trim();
+                    int duration = Integer.parseInt(parts[3].trim());
+                    Booking.FacilityType facility_Type = Booking.FacilityType.valueOf(parts[4].trim().toUpperCase());
+                    Booking.TimeSlot time_Slot = Booking.TimeSlot.valueOf(parts[5].trim().toUpperCase());
+                    Booking.BookingStatus booking_Status = Booking.BookingStatus.valueOf(parts[6].trim().toUpperCase());
+
+                    Booking booking = new Booking(booking_ID, student_ID, booking_Date, duration, facility_Type, time_Slot, booking_Status);
+                    booking_List.add(booking);
+                    count++;
+                }
+            }
+            System.out.println("Loaded " + count + " bookings from file.");
+            
+            
+        } 
+
+        catch (java.io.FileNotFoundException e) {
+            System.out.println("Booking file not found. Starting with an empty booking list.");
+        }
+        
+        catch (Exception e) {
+            System.out.println("Error loading bookings from file: " + e.getMessage());
+        }
+    }
+
+    public static void saveBookingsToFile() {
+        java.io.File bookingFile = new java.io.File(BOOKING_FILE);
+        java.io.File parentDirectory = bookingFile.getParentFile();
+
+        if (parentDirectory != null && !parentDirectory.exists()) {
+            parentDirectory.mkdirs();
+        }
+
+        try (PrintWriter writer = new PrintWriter(bookingFile)) {
+            for (Booking booking : booking_List) {
+                writer.println(booking.getBookingID() + "," +
+                               booking.getStudentID() + "," +
+                               booking.getBookingDate() + "," +
+                               booking.getDuration() + "," +
+                               booking.getFacilityType() + "," +
+                               booking.getTimeSlot() + "," +
+                               booking.getBookingStatus());
+            }
+            System.out.println("Bookings saved to file successfully.");
+        }
+
+        catch (Exception e) {
+            System.out.println("Error saving bookings to file: " + e.getMessage());
+        }
     }
     
     // Equipment Borrowing System
