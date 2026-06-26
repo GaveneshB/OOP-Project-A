@@ -48,6 +48,7 @@ class IssueReport extends ServiceRecord {
         this.status = status;
     }
 
+    @Override
     public void displayRecord() {
         System.out.println("Student ID    : " + studentId);
         System.out.println("Issue Type    : " + issueType);
