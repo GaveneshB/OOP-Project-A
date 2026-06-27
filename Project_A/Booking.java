@@ -42,10 +42,6 @@ public class Booking extends ServiceRecord {
             throw new IllegalArgumentException("Duration must be greater than 0.");
             }
 
-        if (duration > 8) { 
-            throw new IllegalArgumentException("Duration cannot exceed 8 hours.");
-            }
-
         this.booking_ID = booking_ID;
         this.booking_Date = booking_Date;
         this.duration = duration;
@@ -66,8 +62,8 @@ public class Booking extends ServiceRecord {
         return getStudentId();
     }
 
-    public void setStudentID(String student_ID) {
-        setStudentId(student_ID);
+    public void setStudentID(String studentID) {
+        setStudentId(studentID);
     }
 
     public String getBookingDate() {
@@ -86,10 +82,6 @@ public class Booking extends ServiceRecord {
 
         if (duration <= 0) {
             throw new IllegalArgumentException("Duration must be greater than 0.");
-        }
-
-        if (duration > 8) {
-            throw new IllegalArgumentException("Duration cannot exceed 8 hours.");
         }
 
         this.duration = duration;
