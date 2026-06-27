@@ -1,4 +1,4 @@
-public class EquipmentBorrowing{
+public class EquipmentBorrowing extends ServiceRecord{
     enum EquipmentType {
         LAPTOP, PROJECTOR, CAMERA, SENSOR_KIT
     }
@@ -7,13 +7,17 @@ public class EquipmentBorrowing{
         BORROWED, RETURNED, OVERDUE
     }
 
-    private String studentId;
     private EquipmentType equipmentType;
     private int borrowDays;
     private BorrowStatus status;
 
     public EquipmentBorrowing(String studentId, EquipmentType equipmentType, int borrowDays) {
-        this.studentId = studentId;
+        super(studentId);
+
+        if (borrowDays <= 0) {
+        throw new IllegalArgumentException("Borrow days must be greater than 0.");
+    }
+
         this.equipmentType = equipmentType;
         this.borrowDays = borrowDays;
         this.status = BorrowStatus.BORROWED;
@@ -59,5 +63,14 @@ public class EquipmentBorrowing{
         } else {
             return "Requires special approval";
         }
+    }
+
+    @Override
+    public void displayRecord() {
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Equipment Type: " + equipmentType);
+        System.out.println("Borrow Days: " + borrowDays);
+        System.out.println("Status: " + status);
+        System.out.println("Duration Status: " + getDurationStatus());
     }
 }

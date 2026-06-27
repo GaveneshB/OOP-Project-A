@@ -1,4 +1,6 @@
-class IssueReport {
+
+class IssueReport extends ServiceRecord {
+
     enum IssueType {
         ELECTRICAL, NETWORK, FURNITURE, CLEANLINESS, AIR_CONDITIONING
     }
@@ -11,22 +13,15 @@ class IssueReport {
         OPEN, IN_PROGRESS, RESOLVED, CLOSED
     }
 
-    private String studentId;
     private IssueType issueType;
     private PriorityLevel priority;
     private ReportStatus status;
 
-    // Constructor
     public IssueReport(String studentId, IssueType issueType, PriorityLevel priority) {
-        this.studentId = studentId;
+        super(studentId);
         this.issueType = issueType;
         this.priority = priority;
         this.status = ReportStatus.OPEN;
-    }
-
-    // Getters and Setters
-    public String getStudentId() {
-        return studentId;
     }
 
     public IssueType getIssueType() {
@@ -41,10 +36,6 @@ class IssueReport {
         return status;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
     public void setIssueType(IssueType issueType) {
         this.issueType = issueType;
     }
@@ -55,5 +46,13 @@ class IssueReport {
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public void displayRecord() {
+        System.out.println("Student ID    : " + studentId);
+        System.out.println("Issue Type    : " + issueType);
+        System.out.println("Priority      : " + priority);
+        System.out.println("Status        : " + status);
     }
 }
