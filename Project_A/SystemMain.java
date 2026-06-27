@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -680,9 +678,9 @@ public class SystemMain {
         File file = new File("issue_reports.txt");
         if (!file.exists()) return; // No file yet, skip loading
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+        try (Scanner fileScanner = new Scanner(file)) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
                 String[] parts = line.split("\\|");
                 if (parts.length == 4) {
                     String studentId  = parts[0];
