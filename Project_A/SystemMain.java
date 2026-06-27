@@ -167,6 +167,7 @@ public class SystemMain {
 
         Booking newBooking = new Booking(booking_ID, student_ID, booking_Date, duration, Booking.FacilityType.valueOf(facility_Type.toUpperCase()), Booking.TimeSlot.valueOf(time_Slot.toUpperCase()), Booking.BookingStatus.valueOf(booking_Status.toUpperCase()));
         booking_List.add(newBooking);
+        saveBookingRecords(newBooking);
     }
 
     public static void displayAllBookings() {
@@ -852,6 +853,7 @@ public class SystemMain {
         int mainChoice;
 
         readBorrowingRecords();
+        readBookingRecords();
         loadIssueReports(); // File Handling: load saved issue reports on startup
 
         do {
