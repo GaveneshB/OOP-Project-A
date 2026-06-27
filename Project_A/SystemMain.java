@@ -307,12 +307,10 @@ public class SystemMain {
     try {
         FileWriter create = new FileWriter("equipment_borrowing.txt", true);
 
-        create.write(
-            borrowing.getStudentId() + "," +
-            borrowing.getEquipmentType() + "," +
-            borrowing.getBorrowDays() + "," +
-            borrowing.getStatus() + "\n"
-        );
+        create.write(borrowing.getStudentId() + "\n");
+        create.write(borrowing.getEquipmentType() + "\n");
+        create.write(borrowing.getBorrowDays() + "\n");
+        create.write(borrowing.getStatus() + "\n");
 
         create.close();
         System.out.println("Borrowing record saved to file successfully.");
