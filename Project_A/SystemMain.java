@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -495,6 +498,7 @@ public class SystemMain {
         String priority = input.nextLine();
         IssueReport newReport = new IssueReport(student_ID, IssueReport.IssueType.valueOf(issue_Type.toUpperCase()), IssueReport.PriorityLevel.valueOf(priority.toUpperCase()));
         issue_List.add(newReport);
+        saveIssueReports(); // File Handling: auto-save after adding
         System.out.println("Issue report added successfully.");
     }
     
@@ -565,6 +569,7 @@ public class SystemMain {
                 System.out.print("Enter new status (OPEN/IN_PROGRESS/RESOLVED/CLOSED): ");
                 String newStatus = input.nextLine();
                 report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
+                saveIssueReports(); // File Handling: auto-save after update
                 System.out.println("Report status updated successfully.");
                 found = true;
                 break;
@@ -614,6 +619,50 @@ public class SystemMain {
                     System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 6);
+    }
+
+    // ─── FILE HANDLING: IssueReport ───
+
+    // Saves all issue reports to a text file (one record per line)
+    public static void saveIssueReports() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("issue_reports.txt"))) {
+            for (IssueReport report : issue_List) {
+                // Format: studentId|issueType|priority|status
+                writer.write(report.getStudentId() + "|" +
+                             report.getIssueType() + "|" +
+                             report.getPriority() + "|" +
+                             report.getStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving issue reports: " + e.getMessage());
+        }
+    }
+
+    // Loads issue reports from the text file into issue_List on startup
+    public static void loadIssueReports() {
+        File file = new File("issue_reports.txt");
+        if (!file.exists()) return; // No file yet, skip loading
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 4) {
+                    String studentId  = parts[0];
+                    IssueReport.IssueType   issueType = IssueReport.IssueType.valueOf(parts[1]);
+                    IssueReport.PriorityLevel priority = IssueReport.PriorityLevel.valueOf(parts[2]);
+                    IssueReport.ReportStatus  status   = IssueReport.ReportStatus.valueOf(parts[3]);
+
+                    IssueReport report = new IssueReport(studentId, issueType, priority);
+                    report.setStatus(status);
+                    issue_List.add(report);
+                }
+            }
+            System.out.println("Issue reports loaded from file.");
+        } catch (IOException e) {
+            System.out.println("Error loading issue reports: " + e.getMessage());
+        }
     }
 
     public static void viewSystemSummary() {
@@ -726,6 +775,7 @@ public class SystemMain {
         int mainChoice;
 
         readBorrowingRecords();
+        loadIssueReports(); // File Handling: load saved issue reports on startup
 
         do {
             System.out.println("\n========== MAIN MENU ==========");
