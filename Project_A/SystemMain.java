@@ -258,7 +258,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("\n---Facility Booking System---");
+            System.out.println("Facility Booking System");
             System.out.println("1. Add New Booking");
             System.out.println("2. Display All Bookings");
             System.out.println("3. Search Booking by ID");
