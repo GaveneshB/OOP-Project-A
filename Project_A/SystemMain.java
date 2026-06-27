@@ -496,10 +496,20 @@ public class SystemMain {
         String issue_Type = input.nextLine();
         System.out.print("Enter Priority Level (LOW/MEDIUM/HIGH/CRITICAL): ");
         String priority = input.nextLine();
-        IssueReport newReport = new IssueReport(student_ID, IssueReport.IssueType.valueOf(issue_Type.toUpperCase()), IssueReport.PriorityLevel.valueOf(priority.toUpperCase()));
-        issue_List.add(newReport);
-        saveIssueReports(); // File Handling: auto-save after adding
-        System.out.println("Issue report added successfully.");
+
+        try {
+            IssueReport newReport = new IssueReport(
+                student_ID,
+                IssueReport.IssueType.valueOf(issue_Type.toUpperCase()),
+                IssueReport.PriorityLevel.valueOf(priority.toUpperCase())
+            );
+            issue_List.add(newReport);
+            saveIssueReports(); // File Handling: auto-save after adding
+            System.out.println("Issue report added successfully.");
+        } catch (IllegalArgumentException e) {
+            // Catches invalid IssueType or PriorityLevel input
+            System.out.println("Invalid input: '" + e.getMessage().split(" ")[3] + "'. Please use the listed options only.");
+        }
     }
     
     public static void displayAllIssues() {
@@ -517,7 +527,13 @@ public class SystemMain {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to search their reports: ");
         String search_ID = input.nextLine();
-        
+
+        // Exception Handling: validate empty input
+        if (search_ID.trim().isEmpty()) {
+            System.out.println("Error: Student ID cannot be empty.");
+            return;
+        }
+
         boolean found = false;
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(search_ID)) {
@@ -563,15 +579,27 @@ public class SystemMain {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to update their report status: ");
         String student_ID = input.nextLine();
+
+        // Exception Handling: validate empty input
+        if (student_ID.trim().isEmpty()) {
+            System.out.println("Error: Student ID cannot be empty.");
+            return;
+        }
+
         boolean found = false;
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(student_ID)) {
                 System.out.print("Enter new status (OPEN/IN_PROGRESS/RESOLVED/CLOSED): ");
                 String newStatus = input.nextLine();
-                report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
-                saveIssueReports(); // File Handling: auto-save after update
-                System.out.println("Report status updated successfully.");
-                found = true;
+                try {
+                    report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
+                    saveIssueReports(); // File Handling: auto-save after update
+                    System.out.println("Report status updated successfully.");
+                    found = true;
+                } catch (IllegalArgumentException e) {
+                    // Catches invalid ReportStatus input
+                    System.out.println("Invalid status '" + newStatus + "'. Use: OPEN / IN_PROGRESS / RESOLVED / CLOSED");
+                }
                 break;
             }
         }
@@ -593,8 +621,16 @@ public class SystemMain {
             System.out.println("5. Update Report Status"); 
             System.out.println("6. Back to Main Menu");
             System.out.print("Enter your choice: ");
-            choice = input.nextInt();
-            input.nextLine();
+            try {
+                choice = input.nextInt();
+                input.nextLine();
+            } catch (java.util.InputMismatchException e) {
+                // Catches non-integer menu input
+                System.out.println("Invalid input! Please enter a number between 1-6.");
+                input.nextLine(); // clear bad input from buffer
+                choice = -1;     // reset to re-show menu
+                continue;
+            }
 
             switch (choice) {
                 case 1:
