@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
@@ -300,6 +303,25 @@ public class SystemMain {
     }
     
     // Equipment Borrowing System
+    public static void saveBorrowingRecord(EquipmentBorrowing borrowing) {
+    try {
+        FileWriter create = new FileWriter("equipment_borrowing.txt", true);
+
+        create.write(
+            borrowing.getStudentId() + "," +
+            borrowing.getEquipmentType() + "," +
+            borrowing.getBorrowDays() + "," +
+            borrowing.getStatus() + "\n"
+        );
+
+        create.close();
+        System.out.println("Borrowing record saved to file successfully.");
+    }
+    catch (IOException e) {
+        System.out.println("Error saving borrowing record: " + e.getMessage());
+    }
+}
+
     public static void addBorrowingRecord() {
         Scanner input = new Scanner(System.in);
 
@@ -322,18 +344,44 @@ public class SystemMain {
             );
 
             borrow_List.add(newBorrowing);
+            saveBorrowingRecord(newBorrowing);
             System.out.println("Borrowing record added successfully.");
         }
 
         catch (InputMismatchException e) {
-            System.out.println("Invalid input! Please enter the correct data type.");
+            System.out.println("Wrong input data! Borrowing days must be a number.");
             input.nextLine(); 
         }
-
         catch (IllegalArgumentException e) {
             System.out.println("Invalid input! " + e.getMessage());
-        } 
+        }
     }
+    
+    public static void readBorrowingRecords() {
+    try {
+        File file = new File("equipment_borrowing.txt");
+        Scanner read = new Scanner(file);
+
+            while (read.hasNextLine()) {
+                String studentId = read.nextLine();
+                String equipmentType = read.nextLine();
+                
+                int borrowDays = Integer.parseInt(read.nextLine());
+                String status = read.nextLine();
+
+                EquipmentBorrowing borrowing = new EquipmentBorrowing(studentId,EquipmentBorrowing.EquipmentType.valueOf(equipmentType),borrowDays);
+
+                borrowing.setStatus(EquipmentBorrowing.BorrowStatus.valueOf(status));
+                borrow_List.add(borrowing);
+
+            }
+
+        read.close();
+    }
+    catch (IOException e) {
+        System.out.println("No file found!");
+    }
+}
     
     public static void displayAllBorrowing() {
         for (int i = 0; i < borrow_List.size(); i++) {
@@ -389,7 +437,7 @@ public class SystemMain {
                 found = true;
             }
         }        
-        if (!found) {
+        if (found==false) {
             System.out.println("No borrowing records found for that ID.");
         }
     }
@@ -678,6 +726,8 @@ public class SystemMain {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int mainChoice;
+
+        readBorrowingRecords();
 
         do {
             System.out.println("\n========== MAIN MENU ==========");
