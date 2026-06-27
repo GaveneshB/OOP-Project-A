@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -10,7 +11,7 @@ public class SystemMain {
     static Vector<IssueReport> issue_List = new Vector<>();
 
     // Student Profile Management System
-    static void addStudent(Student student) {
+    public static void addStudent(Student student) {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID: ");
         String student_ID = input.nextLine();
@@ -29,7 +30,7 @@ public class SystemMain {
         students[studentCount++] = newStudent;
     }
 
-    static void displayAllStudents() {
+    public static void displayAllStudents() {
         if (studentCount == 0) {
             System.out.println("No students registered.");
         } else {
@@ -47,7 +48,7 @@ public class SystemMain {
         }   
     }
 
-    static void searchStudentByID(String student_ID) {
+    public static void searchStudentByID(String student_ID) {
         boolean found = false;
         for (int i = 0; i < studentCount; i++) {
             Student student = students[i];
@@ -69,7 +70,7 @@ public class SystemMain {
         }
     }
 
-    static void countByCategory() {
+    public static void countByCategory() {
         int undergraduateCount = 0;
         int postgraduateCount = 0;
         int exchangeCount = 0;
@@ -136,7 +137,8 @@ public class SystemMain {
     }
 
      // Facility Booking System
-    static void addBooking() {
+
+    public static void addBooking() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Booking ID: ");
         String booking_ID = input.nextLine();
@@ -161,7 +163,7 @@ public class SystemMain {
         booking_List.add(newBooking);
     }
 
-    static void displayAllBookings() {
+    public static void displayAllBookings() {
         for (Booking booking : booking_List) {
             System.out.println("----------------------------------------");
             System.out.println("Booking ID: " + booking.getBookingID());
@@ -175,7 +177,7 @@ public class SystemMain {
         System.out.println("----------------------------------------");
     }
 
-    static void searchBookingByStudentID(String student_ID) {
+    public static void searchBookingByStudentID(String student_ID) {
         boolean found = false;
         for (Booking booking : booking_List) {
             if (booking.getStudentID().equals(student_ID)) {
@@ -197,7 +199,7 @@ public class SystemMain {
         }
     }
 
-    static void searchBookingByID(String booking_ID) {
+    public static void searchBookingByID(String booking_ID) {
         boolean found = false;
         for (Booking booking : booking_List) {
             if (booking.getBookingID().equals(booking_ID)) {
@@ -220,7 +222,7 @@ public class SystemMain {
         }
     }
 
-    static void calculateTotalDuration() {
+    public static void calculateTotalDuration() {
         int totalDuration = 0;
         for (Booking booking : booking_List) {
             totalDuration += booking.getDuration();
@@ -228,7 +230,7 @@ public class SystemMain {
         System.out.println("Total Duration of All Bookings: " + totalDuration + " hours");
     }
 
-    static void updateBookingStatus() {
+    public static void updateBookingStatus() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Booking ID to update status: ");
         String booking_ID = input.nextLine();
@@ -248,7 +250,7 @@ public class SystemMain {
         }
     }
 
-    static void bookingMenu() {
+    public static void bookingMenu() {
         Scanner input = new Scanner(System.in);
         int choice;
 
@@ -298,21 +300,42 @@ public class SystemMain {
     }
     
     // Equipment Borrowing System
-    static void addBorrowingRecord() {
+    public static void addBorrowingRecord() {
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter Student ID: ");
-        String student_ID = input.nextLine(); 
-        System.out.println("Equipment Type : LAPTOP/PROJECTOR/CAMERA/SENSOR_KIT");
-        System.out.print("Enter Equipment Type: ");
-        String equipment_Type = input.nextLine();
-        System.out.print("Enter Borrowing Days: "); 
-        int borrow_Days = input.nextInt();
-        input.nextLine();
-        EquipmentBorrowing newBorrowing = new EquipmentBorrowing(student_ID, EquipmentBorrowing.EquipmentType.valueOf(equipment_Type.toUpperCase()), borrow_Days);
-        borrow_List.add(newBorrowing);
+
+        try {
+            System.out.print("Enter Student ID: ");
+            String student_ID = input.nextLine();
+
+            System.out.println("Equipment Type : LAPTOP/PROJECTOR/CAMERA/SENSOR_KIT");
+            System.out.print("Enter Equipment Type: ");
+            String equipment_Type = input.nextLine();
+
+            System.out.print("Enter Borrowing Days: ");
+            int borrow_Days = input.nextInt();
+            input.nextLine();
+
+            EquipmentBorrowing newBorrowing = new EquipmentBorrowing(
+                student_ID,
+                EquipmentBorrowing.EquipmentType.valueOf(equipment_Type.toUpperCase()),
+                borrow_Days
+            );
+
+            borrow_List.add(newBorrowing);
+            System.out.println("Borrowing record added successfully.");
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("Invalid input! Please enter the correct data type.");
+            input.nextLine(); 
+        }
+
+        catch (IllegalArgumentException e) {
+            System.out.println("Invalid input! " + e.getMessage());
+        } 
     }
     
-    static void displayAllBorrowing() {
+    public static void displayAllBorrowing() {
         for (int i = 0; i < borrow_List.size(); i++) {
             EquipmentBorrowing borrowing = borrow_List.get(i);
             System.out.println("----------------------------------------");
@@ -323,7 +346,7 @@ public class SystemMain {
         System.out.println("----------------------------------------");
     }
     
-    static void searchBorrowingByID(String student_ID) {
+    public static void searchBorrowingByID(String student_ID) {
         boolean found = false;
         for (int i = 0; i < borrow_List.size(); i++) {
             EquipmentBorrowing borrowing = borrow_List.get(i);
@@ -342,12 +365,12 @@ public class SystemMain {
         }
     }
 
-    static void calculateTotalBorrowedItems() {
+    public static void calculateTotalBorrowedItems() {
         Scanner input = new Scanner(System.in);
         System.out.println("Total items borrowed across all students: " + borrow_List.size());
     }
 
-    static void checkBorrowingDuration() {
+    public static void checkBorrowingDuration() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to check their borrowing status: ");
         String search_ID = input.nextLine();
@@ -357,12 +380,12 @@ public class SystemMain {
             EquipmentBorrowing borrowing = borrow_List.get(i);
             if (borrowing.getStudentId().equals(search_ID)) {
                 System.out.println("Borrowing record found:");
-                System.out.println("----------------------------------------");
+                System.out.println("-----------------------------------");
                 System.out.println("Student ID: " + borrowing.getStudentId());
                 System.out.println("Equipment Type: " + borrowing.getEquipmentType());
                 System.out.println("Borrowing Days: " + borrowing.getBorrowDays());
                 System.out.println("Duration Status: " + borrowing.getDurationStatus());
-                System.out.println("----------------------------------------");
+                System.out.println("------------------------------------");
                 found = true;
             }
         }        
@@ -376,7 +399,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("\n---Equipment Borrowing System---");
+            System.out.println("Equipment Borrowing System");
             System.out.println("1. Add Borrowing Record");
             System.out.println("2. Display All Records");
             System.out.println("3. Search Records by Student ID");
@@ -415,7 +438,7 @@ public class SystemMain {
     }
 
     // Issue Reporting System
-    static void addIssueReport() {
+    public static void addIssueReport() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID: ");
         String student_ID = input.nextLine();
@@ -429,7 +452,7 @@ public class SystemMain {
         System.out.println("Issue report added successfully.");
     }
     
-    static void displayAllIssues() {
+    public static void displayAllIssues() {
         for (IssueReport report : issue_List) {
             System.out.println("----------------------------------------");
             System.out.println("Student ID: " + report.getStudentId());
@@ -440,7 +463,7 @@ public class SystemMain {
         System.out.println("----------------------------------------");
     }
 
-    static void searchIssueByID() {
+    public static void searchIssueByID() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to search their reports: ");
         String search_ID = input.nextLine();
@@ -449,12 +472,10 @@ public class SystemMain {
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(search_ID)) {
                 System.out.println("Issue report found:");
-                System.out.println("----------------------------------------");
                 System.out.println("Student ID: " + report.getStudentId());
                 System.out.println("Issue Type: " + report.getIssueType());
                 System.out.println("Priority Level: " + report.getPriority());
                 System.out.println("Status: " + report.getStatus());
-                System.out.println("----------------------------------------");
                 found = true;
             }
         }
@@ -463,7 +484,7 @@ public class SystemMain {
         }
     }
 
-    static void countReportsByPriority() {
+    public static void countReportsByPriority() {
         int lowCount = 0, mediumCount = 0, highCount = 0, criticalCount = 0;
         for (IssueReport report : issue_List) {
             switch (report.getPriority()) {
@@ -481,14 +502,14 @@ public class SystemMain {
                     break;
             }
         }
-        System.out.println("--- Issue Reports by Priority ---");
+        System.out.println("Issue Reports by Priority");
         System.out.println("Low: " + lowCount);
         System.out.println("Medium: " + mediumCount);
         System.out.println("High: " + highCount);
         System.out.println("Critical: " + criticalCount);
     }
     
-    static void updateReportStatus() {
+    public static void updateReportStatus() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to update their report status: ");
         String student_ID = input.nextLine();
@@ -513,7 +534,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("\n---Facility Issue Reporting---");
+            System.out.println("Facility Issue Reporting");
             System.out.println("1. Add New Issue Report");
             System.out.println("2. Display All Reports");
             System.out.println("3. Search Issue by Student ID");
@@ -549,9 +570,9 @@ public class SystemMain {
         } while (choice != 6);
     }
 
-    static void viewSystemSummary() {
+    public static void viewSystemSummary() {
 
-    System.out.println("\n========== SYSTEM SUMMARY ==========");
+    System.out.println("SYSTEM SUMMARY");
 
     System.out.println("Total Students Registered : " + studentCount);
     System.out.println("Total Facility Bookings   : " + booking_List.size());
@@ -580,7 +601,7 @@ public class SystemMain {
         }
     }
 
-    System.out.println("\n--- Student Category Summary ---");
+    System.out.println("Student Category Summary");
     System.out.println("UNDERGRADUATE : " + undergraduate);
     System.out.println("POSTGRADUATE  : " + postgraduate);
     System.out.println("EXCHANGE      : " + exchange);
