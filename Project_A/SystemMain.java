@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -244,12 +247,58 @@ public class SystemMain {
                 String newStatus = input.nextLine();
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Booking status updated successfully.");
+                saveBookingsToFile(); // Save changes to file
                 found = true;
                 break;
             }
         }
         if (!found) {
             System.out.println("No booking found with the given ID.");
+        }
+    }
+
+    public static void saveBookingsToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("bookings.txt"))) {
+            for (Booking booking : booking_List) {
+                writer.write(booking.getBookingID() + "|" +
+                             booking.getStudentID() + "|" +
+                             booking.getBookingDate() + "|" +
+                             booking.getDuration() + "|" +
+                             booking.getFacilityType() + "|" +
+                             booking.getTimeSlot() + "|" +
+                             booking.getBookingStatus());
+                writer.newLine();
+            }
+            System.out.println("Bookings saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving bookings: " + e.getMessage());
+        }
+    }
+
+    public static void loadBookingsFromFile() {
+        File file = new File("bookings.txt");
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 7) {
+                    String bookingID = parts[0];
+                    String studentID = parts[1];
+                    String bookingDate = parts[2];
+                    int duration = Integer.parseInt(parts[3]);
+                    Booking.FacilityType facilityType = Booking.FacilityType.valueOf(parts[4]);
+                    Booking.TimeSlot timeSlot = Booking.TimeSlot.valueOf(parts[5]);
+                    Booking.BookingStatus bookingStatus = Booking.BookingStatus.valueOf(parts[6]);
+
+                    Booking booking = new Booking(bookingID, studentID, bookingDate, duration, facilityType, timeSlot, bookingStatus);
+                    booking_List.add(booking);
+                }
+            }
+            System.out.println("Bookings loaded from file.");
+        } catch (IOException e) {
+            System.out.println("Error loading bookings: " + e.getMessage());
         }
     }
 
@@ -273,6 +322,7 @@ public class SystemMain {
             switch (choice) {
                 case 1:
                     addBooking();
+                    saveBookingsToFile(); // Save after adding a new booking
                     break;
                 case 2:
                     displayAllBookings();
@@ -292,6 +342,7 @@ public class SystemMain {
                     break;
                 case 6:
                     updateBookingStatus();
+                    saveBookingsToFile(); // Save changes to file
                     break;
                 case 7:
                     System.out.println("Returning to Main Menu...");
@@ -493,9 +544,20 @@ public class SystemMain {
         String issue_Type = input.nextLine();
         System.out.print("Enter Priority Level (LOW/MEDIUM/HIGH/CRITICAL): ");
         String priority = input.nextLine();
-        IssueReport newReport = new IssueReport(student_ID, IssueReport.IssueType.valueOf(issue_Type.toUpperCase()), IssueReport.PriorityLevel.valueOf(priority.toUpperCase()));
-        issue_List.add(newReport);
-        System.out.println("Issue report added successfully.");
+
+        try {
+            IssueReport newReport = new IssueReport(
+                student_ID,
+                IssueReport.IssueType.valueOf(issue_Type.toUpperCase()),
+                IssueReport.PriorityLevel.valueOf(priority.toUpperCase())
+            );
+            issue_List.add(newReport);
+            saveIssueReports(); // File Handling: auto-save after adding
+            System.out.println("Issue report added successfully.");
+        } catch (IllegalArgumentException e) {
+            // Catches invalid IssueType or PriorityLevel input
+            System.out.println("Invalid input: '" + e.getMessage().split(" ")[3] + "'. Please use the listed options only.");
+        }
     }
     
     public static void displayAllIssues() {
@@ -513,7 +575,13 @@ public class SystemMain {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to search their reports: ");
         String search_ID = input.nextLine();
-        
+
+        // Exception Handling: validate empty input
+        if (search_ID.trim().isEmpty()) {
+            System.out.println("Error: Student ID cannot be empty.");
+            return;
+        }
+
         boolean found = false;
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(search_ID)) {
@@ -559,14 +627,27 @@ public class SystemMain {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Student ID to update their report status: ");
         String student_ID = input.nextLine();
+
+        // Exception Handling: validate empty input
+        if (student_ID.trim().isEmpty()) {
+            System.out.println("Error: Student ID cannot be empty.");
+            return;
+        }
+
         boolean found = false;
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(student_ID)) {
                 System.out.print("Enter new status (OPEN/IN_PROGRESS/RESOLVED/CLOSED): ");
                 String newStatus = input.nextLine();
-                report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
-                System.out.println("Report status updated successfully.");
-                found = true;
+                try {
+                    report.setStatus(IssueReport.ReportStatus.valueOf(newStatus.toUpperCase()));
+                    saveIssueReports(); // File Handling: auto-save after update
+                    System.out.println("Report status updated successfully.");
+                    found = true;
+                } catch (IllegalArgumentException e) {
+                    // Catches invalid ReportStatus input
+                    System.out.println("Invalid status '" + newStatus + "'. Use: OPEN / IN_PROGRESS / RESOLVED / CLOSED");
+                }
                 break;
             }
         }
@@ -588,8 +669,16 @@ public class SystemMain {
             System.out.println("5. Update Report Status"); 
             System.out.println("6. Back to Main Menu");
             System.out.print("Enter your choice: ");
-            choice = input.nextInt();
-            input.nextLine();
+            try {
+                choice = input.nextInt();
+                input.nextLine();
+            } catch (java.util.InputMismatchException e) {
+                // Catches non-integer menu input
+                System.out.println("Invalid input! Please enter a number between 1-6.");
+                input.nextLine(); // clear bad input from buffer
+                choice = -1;     // reset to re-show menu
+                continue;
+            }
 
             switch (choice) {
                 case 1:
@@ -614,6 +703,50 @@ public class SystemMain {
                     System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 6);
+    }
+
+    // ─── FILE HANDLING: IssueReport ───
+
+    // Saves all issue reports to a text file (one record per line)
+    public static void saveIssueReports() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("issue_reports.txt"))) {
+            for (IssueReport report : issue_List) {
+                // Format: studentId|issueType|priority|status
+                writer.write(report.getStudentId() + "|" +
+                             report.getIssueType() + "|" +
+                             report.getPriority() + "|" +
+                             report.getStatus());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving issue reports: " + e.getMessage());
+        }
+    }
+
+    // Loads issue reports from the text file into issue_List on startup
+    public static void loadIssueReports() {
+        File file = new File("issue_reports.txt");
+        if (!file.exists()) return; // No file yet, skip loading
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 4) {
+                    String studentId  = parts[0];
+                    IssueReport.IssueType   issueType = IssueReport.IssueType.valueOf(parts[1]);
+                    IssueReport.PriorityLevel priority = IssueReport.PriorityLevel.valueOf(parts[2]);
+                    IssueReport.ReportStatus  status   = IssueReport.ReportStatus.valueOf(parts[3]);
+
+                    IssueReport report = new IssueReport(studentId, issueType, priority);
+                    report.setStatus(status);
+                    issue_List.add(report);
+                }
+            }
+            System.out.println("Issue reports loaded from file.");
+        } catch (IOException e) {
+            System.out.println("Error loading issue reports: " + e.getMessage());
+        }
     }
 
     public static void viewSystemSummary() {
@@ -726,6 +859,8 @@ public class SystemMain {
         int mainChoice;
 
         readBorrowingRecords();
+        loadIssueReports(); // File Handling: load saved issue reports on startup
+        loadBookingsFromFile(); // Load bookings from file on startup
 
         do {
             System.out.println("\n========== MAIN MENU ==========");
