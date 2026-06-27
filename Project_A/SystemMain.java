@@ -247,12 +247,58 @@ public class SystemMain {
                 String newStatus = input.nextLine();
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Booking status updated successfully.");
+                saveBookingsToFile(); // Save changes to file
                 found = true;
                 break;
             }
         }
         if (!found) {
             System.out.println("No booking found with the given ID.");
+        }
+    }
+
+    public static void saveBookingsToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("bookings.txt"))) {
+            for (Booking booking : booking_List) {
+                writer.write(booking.getBookingID() + "|" +
+                             booking.getStudentID() + "|" +
+                             booking.getBookingDate() + "|" +
+                             booking.getDuration() + "|" +
+                             booking.getFacilityType() + "|" +
+                             booking.getTimeSlot() + "|" +
+                             booking.getBookingStatus());
+                writer.newLine();
+            }
+            System.out.println("Bookings saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving bookings: " + e.getMessage());
+        }
+    }
+
+    public static void loadBookingsFromFile() {
+        File file = new File("bookings.txt");
+        if (!file.exists()) return;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 7) {
+                    String bookingID = parts[0];
+                    String studentID = parts[1];
+                    String bookingDate = parts[2];
+                    int duration = Integer.parseInt(parts[3]);
+                    Booking.FacilityType facilityType = Booking.FacilityType.valueOf(parts[4]);
+                    Booking.TimeSlot timeSlot = Booking.TimeSlot.valueOf(parts[5]);
+                    Booking.BookingStatus bookingStatus = Booking.BookingStatus.valueOf(parts[6]);
+
+                    Booking booking = new Booking(bookingID, studentID, bookingDate, duration, facilityType, timeSlot, bookingStatus);
+                    booking_List.add(booking);
+                }
+            }
+            System.out.println("Bookings loaded from file.");
+        } catch (IOException e) {
+            System.out.println("Error loading bookings: " + e.getMessage());
         }
     }
 
@@ -276,6 +322,7 @@ public class SystemMain {
             switch (choice) {
                 case 1:
                     addBooking();
+                    saveBookingsToFile(); // Save after adding a new booking
                     break;
                 case 2:
                     displayAllBookings();
@@ -295,6 +342,7 @@ public class SystemMain {
                     break;
                 case 6:
                     updateBookingStatus();
+                    saveBookingsToFile(); // Save changes to file
                     break;
                 case 7:
                     System.out.println("Returning to Main Menu...");
@@ -812,6 +860,7 @@ public class SystemMain {
 
         readBorrowingRecords();
         loadIssueReports(); // File Handling: load saved issue reports on startup
+        loadBookingsFromFile(); // Load bookings from file on startup
 
         do {
             System.out.println("\n========== MAIN MENU ==========");
