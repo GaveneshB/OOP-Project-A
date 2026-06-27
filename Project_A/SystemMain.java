@@ -165,6 +165,7 @@ public class SystemMain {
 
         Booking newBooking = new Booking(booking_ID, student_ID, booking_Date, duration, Booking.FacilityType.valueOf(facility_Type.toUpperCase()), Booking.TimeSlot.valueOf(time_Slot.toUpperCase()), Booking.BookingStatus.valueOf(booking_Status.toUpperCase()));
         booking_List.add(newBooking);
+        saveBookingRecords(newBooking);
     }
 
     public static void displayAllBookings() {
@@ -254,12 +255,53 @@ public class SystemMain {
         }
     }
 
+    public static void saveBookingRecords(Booking booking) {
+        try {
+            FileWriter create = new FileWriter("bookings.txt", true);
+            create.write(booking.getBookingID() + "\n");
+            create.write(booking.getStudentID() + "\n");
+            create.write(booking.getBookingDate() + "\n");
+            create.write(booking.getDuration() + "\n");
+            create.write(booking.getFacilityType().toString() + "\n");
+            create.write(booking.getTimeSlot().toString() + "\n");
+            create.write(booking.getBookingStatus().toString() + "\n");
+            create.close();
+            System.out.println("Booking record saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error occurred while saving booking record to file.");
+        }
+    }
+
+    public static void readBookingRecords() {
+        try {
+            File file = new File("bookings.txt");
+            Scanner read = new Scanner(file);
+
+            while (read.hasNextLine()) {
+                String booking_ID = read.nextLine();
+                String student_ID = read.nextLine();
+                String booking_Date = read.nextLine();
+                int duration = Integer.parseInt(read.nextLine());
+                Booking.FacilityType facility_Type = Booking.FacilityType.valueOf(read.nextLine());
+                Booking.TimeSlot time_Slot = Booking.TimeSlot.valueOf(read.nextLine());
+                Booking.BookingStatus booking_Status = Booking.BookingStatus.valueOf(read.nextLine());
+
+                Booking booking = new Booking(booking_ID, student_ID, booking_Date, duration, facility_Type, time_Slot, booking_Status);
+                booking_List.add(booking);
+            }
+
+            read.close();
+        } catch (IOException e) {
+            System.out.println("No file found!");
+        }
+    }
+
     public static void bookingMenu() {
         Scanner input = new Scanner(System.in);
         int choice;
 
         do {
-            System.out.println("\n---Facility Booking System---");
+            System.out.println("Facility Booking System");
             System.out.println("1. Add New Booking");
             System.out.println("2. Display All Bookings");
             System.out.println("3. Search Booking by ID");
@@ -809,6 +851,7 @@ public class SystemMain {
         int mainChoice;
 
         readBorrowingRecords();
+        readBookingRecords();
         loadIssueReports(); // File Handling: load saved issue reports on startup
 
         do {
