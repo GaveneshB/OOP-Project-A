@@ -133,8 +133,6 @@ public class SystemMain {
             }
 
         } while (choice != 5);
-
-        input.close();
     }
 
      // Facility Booking System
@@ -149,13 +147,13 @@ public class SystemMain {
         System.out.print("Enter Duration (hours): ");
         int duration = input.nextInt();
         input.nextLine(); 
-        System.out.println("Facility Type : STUDY_ROOM/MEETING_ROOM/COMPUTER_LAB");
+        System.out.println("Facility Type : STUDY_ROOM/COMPUTER_LAB/SPORT_COURT/SEMINAR_ROOM");
         System.out.print("Enter Facility Type: ");
         String facility_Type = input.nextLine();
         System.out.println("Time Slot : MORNING/AFTERNOON/EVENING");
         System.out.print("Enter Time Slot: ");
         String time_Slot = input.nextLine();
-        System.out.println("Booking Status : PENDING/CONFIRMED/CANCELLED");
+        System.out.println("Booking Status : PENDING/APPROVED/REJECTED/CANCELLED");
         System.out.print("Enter Booking Status: ");
         String booking_Status = input.nextLine();
 
@@ -237,7 +235,7 @@ public class SystemMain {
         boolean found = false;
         for (Booking booking : booking_List) {
             if (booking.getBookingID().equals(booking_ID)) {
-                System.out.print("Enter new status (PENDING/CONFIRMED/CANCELLED): ");
+                System.out.print("Enter new status (PENDING/APPROVED/REJECTED/CANCELLED): ");
                 String newStatus = input.nextLine();
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(newStatus.toUpperCase()));
                 System.out.println("Booking status updated successfully.");
@@ -588,7 +586,8 @@ public class SystemMain {
     System.out.println("EXCHANGE      : " + exchange);
 
     int pending = 0;
-    int confirmed = 0;
+    int approved = 0;
+    int rejected = 0;
     int cancelled = 0;
 
     for (int i = 0; i < booking_List.size(); i++) {
@@ -600,7 +599,11 @@ public class SystemMain {
                 break;
 
             case APPROVED:
-                confirmed++;
+                approved++;
+                break;
+
+            case REJECTED:
+                rejected++;
                 break;
 
             case CANCELLED:
@@ -611,7 +614,8 @@ public class SystemMain {
 
     System.out.println("\n--- Booking Status Summary ---");
     System.out.println("PENDING   : " + pending);
-    System.out.println("CONFIRMED : " + confirmed);
+    System.out.println("APPROVED  : " + approved);
+    System.out.println("REJECTED  : " + rejected);
     System.out.println("CANCELLED : " + cancelled);
 
     int low = 0;
