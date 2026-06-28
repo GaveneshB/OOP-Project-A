@@ -15,23 +15,77 @@ public class SystemMain {
     static Vector<IssueReport> issue_List = new Vector<>();
 
     // Student Profile Management System
-    public static void addStudent(Student student) {
+    public static void saveStudentRecords(Student student) {
+        try {
+            FileWriter create = new FileWriter("students.txt", true);
+            create.write(student.getStudentID() + "\n");
+            create.write(student.getStudentName() + "\n");
+            create.write(student.getProgramme() + "\n");
+            create.write(student.getYearOfStudy() + "\n");
+            create.write(student.getCategory().toString() + "\n");
+            create.close();
+            System.out.println("Student record saved to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error occurred while saving student record to file.");
+        }
+    }
+
+    public static void addStudentRecord() {
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter Student ID: ");
-        String student_ID = input.nextLine();
-        System.out.print("Enter Student Name: ");
-        String student_Name = input.nextLine();
-        System.out.print("Enter Programme: ");
-        String programme = input.nextLine();
-        System.out.print("Enter Year of Study: ");
-        int year_Of_Study = input.nextInt();
-        input.nextLine(); 
-        System.out.print("Enter Category (UNDERGRADUATE/POSTGRADUATE/EXCHANGE): ");
-        String categoryStr = input.nextLine();
-        Student.StudentCategory category = Student.StudentCategory.valueOf(categoryStr.toUpperCase());
-        
-        Student newStudent = new Student(student_ID, student_Name, programme, year_Of_Study, category);
-        students[studentCount++] = newStudent;
+
+        try {
+            System.out.print("Enter Student ID: ");
+            String student_ID = input.nextLine();
+
+            System.out.print("Enter Student Name: ");
+            String student_Name = input.nextLine();
+
+            System.out.print("Enter Programme: ");
+            String programme = input.nextLine();
+
+            System.out.print("Enter Year of Study: ");
+            int year_Of_Study = input.nextInt();
+            input.nextLine();
+
+            System.out.println("Student Category (UNDERGRADUATE/POSTGRADUATE/EXCHANGE) :");
+            System.out.print("Enter Student Category: ");
+            String category = input.nextLine();
+
+            Student student = new Student(student_ID, student_Name, programme, year_Of_Study, Student.StudentCategory.valueOf(category.toUpperCase()));
+            students[studentCount++] = student;
+            saveStudentRecords(student);
+            System.out.println("Student record added successfully.");
+        }
+
+        catch (InputMismatchException e) {
+            System.out.println("Wrong input data! Year of study must be a number.");
+            input.nextLine(); 
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("Invalid input! " + e.getMessage());
+        }
+    }
+
+    public static void readStudentRecords() {
+        try {
+            File file = new File("students.txt");
+            Scanner read = new Scanner(file);
+
+            while (read.hasNextLine()) {
+                String student_ID = read.nextLine();
+                String student_Name = read.nextLine();
+                String programme = read.nextLine();
+                int year_Of_Study = Integer.parseInt(read.nextLine());
+                Student.StudentCategory category = Student.StudentCategory.valueOf(read.nextLine());
+
+                Student student = new Student(student_ID, student_Name, programme, year_Of_Study, category);
+                students[studentCount++] = student;
+            }
+
+            read.close();
+        } catch (IOException e) {
+            System.out.println("No file found!");
+        }
     }
 
     public static void displayAllStudents() {
@@ -47,8 +101,8 @@ public class SystemMain {
                 System.out.println("Programme: " + student.getProgramme());
                 System.out.println("Year of Study: " + student.getYearOfStudy()); 
                 System.out.println("Category: " + student.getCategory());
-                System.out.println("----------------------------------------");
             }
+            System.out.println("----------------------------------------");
         }   
     }
 
@@ -117,7 +171,7 @@ public class SystemMain {
 
             switch (choice) {
                 case 1:
-                    addStudent(new Student());
+                    addStudentRecord();
                     break;
                 case 2:
                     displayAllStudents();
@@ -850,6 +904,7 @@ public class SystemMain {
         Scanner input = new Scanner(System.in);
         int mainChoice;
 
+        readStudentRecords();
         readBorrowingRecords();
         readBookingRecords();
         loadIssueReports(); // File Handling: load saved issue reports on startup
