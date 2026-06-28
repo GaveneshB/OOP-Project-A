@@ -2,6 +2,10 @@ class ServiceRecord {
 
     protected String studentId;
 
+    public ServiceRecord() {
+        this.studentId = "";
+    }
+
     public ServiceRecord(String studentId) {
         this.studentId = studentId;
     }
