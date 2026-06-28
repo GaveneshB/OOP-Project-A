@@ -52,7 +52,7 @@ class IssueReport extends ServiceRecord {
     public void displayRecord() {
         System.out.println("Student ID    : " + studentId);
         System.out.println("Issue Type    : " + issueType);
-        System.out.println("Priority      : " + priority);
+        System.out.println("Priority Level: " + priority);
         System.out.println("Status        : " + status);
     }
 }
