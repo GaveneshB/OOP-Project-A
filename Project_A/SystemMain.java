@@ -317,6 +317,7 @@ public class SystemMain {
                 Booking booking = new Booking(booking_ID, student_ID, booking_Date, duration, facility_Type, time_Slot, booking_Status);
                 booking_List.add(booking);
             }
+            System.out.println("Booking records loaded from file.");
 
             read.close();
         } catch (IOException e) {
