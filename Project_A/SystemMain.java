@@ -96,11 +96,7 @@ public class SystemMain {
             for (int i = 0; i < studentCount; i++) {
                 Student student = students[i];
                 System.out.println("----------------------------------------");
-                System.out.println("ID: " + student.getStudentID());
-                System.out.println("Name: " + student.getStudentName());
-                System.out.println("Programme: " + student.getProgramme());
-                System.out.println("Year of Study: " + student.getYearOfStudy()); 
-                System.out.println("Category: " + student.getCategory());
+                student.displayStudentInfo();
             }
             System.out.println("----------------------------------------");
         }   
@@ -113,11 +109,7 @@ public class SystemMain {
             if (student.getStudentID().equals(student_ID)) {
                 System.out.println("Student found:");
                 System.out.println("----------------------------------------");
-                System.out.println("ID: " + student.getStudentID());
-                System.out.println("Name: " + student.getStudentName());
-                System.out.println("Programme: " + student.getProgramme());
-                System.out.println("Year of Study: " + student.getYearOfStudy()); 
-                System.out.println("Category: " + student.getCategory());
+                student.displayStudentInfo();
                 System.out.println("----------------------------------------");
                 found = true;
                 break;
@@ -225,13 +217,7 @@ public class SystemMain {
     public static void displayAllBookings() {
         for (Booking booking : booking_List) {
             System.out.println("----------------------------------------");
-            System.out.println("Booking ID: " + booking.getBookingID());
-            System.out.println("Student ID: " + booking.getStudentID());
-            System.out.println("Booking Date: " + booking.getBookingDate());
-            System.out.println("Duration: " + booking.getDuration() + " hours");
-            System.out.println("Facility Type: " + booking.getFacilityType());
-            System.out.println("Time Slot: " + booking.getTimeSlot());
-            System.out.println("Booking Status: " + booking.getBookingStatus());
+            booking.displayRecord();
         }
         System.out.println("----------------------------------------");
     }
@@ -242,13 +228,7 @@ public class SystemMain {
             if (booking.getStudentID().equals(student_ID)) {
                 System.out.println("Booking found:");
                 System.out.println("----------------------------------------");
-                System.out.println("Booking ID: " + booking.getBookingID());
-                System.out.println("Student ID: " + booking.getStudentID());
-                System.out.println("Booking Date: " + booking.getBookingDate());
-                System.out.println("Duration: " + booking.getDuration() + " hours");
-                System.out.println("Facility Type: " + booking.getFacilityType());
-                System.out.println("Time Slot: " + booking.getTimeSlot());
-                System.out.println("Booking Status: " + booking.getBookingStatus());
+                booking.displayRecord();
                 System.out.println("----------------------------------------");
                 found = true;
             }
@@ -264,13 +244,7 @@ public class SystemMain {
             if (booking.getBookingID().equals(booking_ID)) {
                 System.out.println("Booking found:");
                 System.out.println("----------------------------------------");
-                System.out.println("Booking ID: " + booking.getBookingID());
-                System.out.println("Student ID: " + booking.getStudentID());
-                System.out.println("Booking Date: " + booking.getBookingDate());
-                System.out.println("Duration: " + booking.getDuration() + " hours");
-                System.out.println("Facility Type: " + booking.getFacilityType());
-                System.out.println("Time Slot: " + booking.getTimeSlot());
-                System.out.println("Booking Status: " + booking.getBookingStatus());
+                booking.displayRecord();
                 System.out.println("----------------------------------------");
                 found = true;
                 break;
@@ -355,7 +329,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("Facility Booking System");
+            System.out.println("\n---Facility Booking System---");
             System.out.println("1. Add New Booking");
             System.out.println("2. Display All Bookings");
             System.out.println("3. Search Booking by ID");
@@ -542,7 +516,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("Equipment Borrowing System");
+            System.out.println("\n---Equipment Borrowing System---");
             System.out.println("1. Add Borrowing Record");
             System.out.println("2. Display All Records");
             System.out.println("3. Search Records by Student ID");
@@ -609,10 +583,7 @@ public class SystemMain {
     public static void displayAllIssues() {
         for (IssueReport report : issue_List) {
             System.out.println("----------------------------------------");
-            System.out.println("Student ID: " + report.getStudentId());
-            System.out.println("Issue Type: " + report.getIssueType());
-            System.out.println("Priority Level: " + report.getPriority());
-            System.out.println("Status: " + report.getStatus());
+            report.displayRecord();
         }
         System.out.println("----------------------------------------");
     }
@@ -631,11 +602,7 @@ public class SystemMain {
         boolean found = false;
         for (IssueReport report : issue_List) {
             if (report.getStudentId().equals(search_ID)) {
-                System.out.println("Issue report found:");
-                System.out.println("Student ID: " + report.getStudentId());
-                System.out.println("Issue Type: " + report.getIssueType());
-                System.out.println("Priority Level: " + report.getPriority());
-                System.out.println("Status: " + report.getStatus());
+                report.displayRecord();
                 found = true;
             }
         }
@@ -707,7 +674,7 @@ public class SystemMain {
         int choice;
 
         do {
-            System.out.println("Facility Issue Reporting");
+            System.out.println("\n---Facility Issue Reporting---");
             System.out.println("1. Add New Issue Report");
             System.out.println("2. Display All Reports");
             System.out.println("3. Search Issue by Student ID");
