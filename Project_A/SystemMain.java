@@ -875,7 +875,7 @@ public class SystemMain {
         readStudentRecords();
         readBorrowingRecords();
         readBookingRecords();
-        loadIssueReports(); // File Handling: load saved issue reports on startup
+        loadIssueReports(); 
 
         do {
             System.out.println("\n========== MAIN MENU ==========");
