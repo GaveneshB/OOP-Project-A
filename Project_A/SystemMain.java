@@ -80,6 +80,7 @@ public class SystemMain {
                 Student student = new Student(student_ID, student_Name, programme, year_Of_Study, category);
                 students[studentCount++] = student;
             }
+            System.out.println("Student records loaded from file.");
 
             read.close();
         } catch (IOException e) {
@@ -444,6 +445,7 @@ public class SystemMain {
                 borrow_List.add(borrowing);
 
             }
+            System.out.println("Borrowing records loaded from file.");
 
         read.close();
     }
