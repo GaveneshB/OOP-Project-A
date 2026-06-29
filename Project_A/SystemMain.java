@@ -1,4 +1,3 @@
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -719,28 +718,31 @@ public class SystemMain {
         } while (choice != 6);
     }
 
-    // ─── FILE HANDLING: IssueReport ───
 
     // Saves all issue reports to a text file (one record per line)
     public static void saveIssueReports() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("issue_reports.txt"))) {
-            for (IssueReport report : issue_List) {
-                // Format: studentId|issueType|priority|status
-                writer.write(report.getStudentId() + "|" +
-                             report.getIssueType() + "|" +
-                             report.getPriority() + "|" +
-                             report.getStatus());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving issue reports: " + e.getMessage());
+    try {
+        FileWriter create = new FileWriter("issue_reports.txt");
+
+        for (IssueReport report : issue_List) {
+            create.write(report.getStudentId() + "|" +
+                         report.getIssueType() + "|" +
+                         report.getPriority() + "|" +
+                         report.getStatus() + "\n");
         }
+
+        create.close();
+        System.out.println("Issue reports saved successfully.");
     }
+    catch (IOException e) {
+        System.out.println("Error saving issue reports: " + e.getMessage());
+    }
+}
 
     // Loads issue reports from the text file into issue_List on startup
     public static void loadIssueReports() {
         File file = new File("issue_reports.txt");
-        if (!file.exists()) return; // No file yet, skip loading
+        if (!file.exists()) return; 
 
         try (Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
